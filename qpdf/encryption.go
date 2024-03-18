@@ -42,10 +42,12 @@ void encrypt(qpdf_data qpdf) {
 */
 import "C"
 
-func Decryption(qpdf C.qpdf_data) {
+func Decryption(qpdf C.qpdf_data) error {
 	C.decrypt(qpdf)
+	return nil
 }
 
-func Encryption(qpdf C.qpdf_data) {
+func Encryption(qpdf C.qpdf_data) error {
 	C.encrypt(qpdf)
+	return nil
 }
