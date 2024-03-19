@@ -10,8 +10,6 @@ import "C"
 import (
 	"fmt"
 	"julypdf/ignoreerror"
-	"path"
-	"strings"
 	"unsafe"
 )
 
@@ -28,43 +26,33 @@ func freeCString(cstr *C.char) {
 // CryptoOnPDF encrypts a PDF file using the specified Crypto operation.
 //
 // op: the Crypto operation to apply to the PDF.
-// fileName: the name of the PDF file to encrypt.
+// originFileName: the name of the PDF file to encrypt.
 // cryptType: the type of cryption to use. 1:encryption, 2:decryption
-func CryptoOnPDF(op Crypto, fileName string, cryptType int) (string, error) {
+func CryptoOnPDF(op Crypto, originFileName string, targetFileName string, cryptType int) (string, error) {
 	qpdf := C.qpdf_init()
 	defer C.qpdf_cleanup(&qpdf)
 
-	inputPDF := C.CString(fileName)
+	inputPDF := C.CString(originFileName)
 	defer freeCString(inputPDF)
 	password := C.CString("")
 	defer freeCString(password)
 
 	if C.qpdf_read(qpdf, inputPDF, password) != C.QPDF_SUCCESS {
-		return "", fmt.Errorf("failed to read PDF: %s", fileName)
+		return "", fmt.Errorf("failed to read PDF: %s", originFileName)
 	}
 
-	dirPath := path.Dir(fileName)
-	baseName := strings.TrimSuffix(fileName, path.Ext(fileName))
-	outputFilename := ""
-	if cryptType == 1 {
-		outputFilename = fmt.Sprintf("%s_encrypted.pdf", baseName)
-	} else if cryptType == 2 {
-		outputFilename = fmt.Sprintf("%s_decrypted.pdf", baseName)
-	}
-
-	outputFilePath := path.Join(dirPath, outputFilename)
-	outputPDF := C.CString(outputFilePath)
+	outputPDF := C.CString(targetFileName)
 	defer freeCString(outputPDF)
 
 	C.qpdf_init_write(qpdf, outputPDF)
 
 	op(qpdf)
 
+	//some pdf not standard
 	if C.qpdf_write(qpdf) != C.QPDF_SUCCESS {
-		fmt.Println("write error")
-		return outputFilePath, &ignoreerror.IgnorableError{Msg: "ignore"}
+		return targetFileName, &ignoreerror.IgnorableError{Msg: "ignore"}
 	}
-	return outputFilePath, nil
+	return targetFileName, nil
 }
 
 func MeargeOnPDF(op MergeType, originFile string, outputFile string) {

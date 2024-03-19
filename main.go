@@ -1,8 +1,6 @@
 package main
 
-import (
-	"julypdf/cpu"
-)
+import "julypdf/cpu"
 
 func main() {
 	// qpdf.cryptoOnPDF(qpdf.Decryption)
@@ -11,5 +9,5 @@ func main() {
 	// qpdf.SplitOnPDF(qpdf.Split, "555.pdf", 1)
 	// res := utilts.CheckIfEncrypted("555.pdf")
 	// fmt.Println(res)
-	cpu.AddWatermark("555.pdf")
+	cpu.AddWatermark("555.pdf", "666.pdf", "july")
 }
