@@ -1,6 +1,6 @@
 module julypdf
 
-go 1.22.1
+go 1.18
 
 require github.com/pdfcpu/pdfcpu v0.7.0
 

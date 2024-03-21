@@ -2,7 +2,7 @@ package qpdf
 
 /*
 #cgo CFLAGS: -I../include
-#cgo LDFLAGS: -lgcc_s -lstdc++ -lmingwex -ljpeg -lz -lgnutls -lssl -lcrypto -lws2_32 -lqpdf
+#cgo LDFLAGS: -lgcc_s -lstdc++ -ljpeg -lz  -lssl -lcrypto  -lqpdf
 #include <stdlib.h>
 #include "qpdf/qpdf-c.h"
 */
@@ -13,6 +13,8 @@ import (
 	"strings"
 	"unsafe"
 )
+
+// #cgo LDFLAGS: -lgcc_s -lstdc++ -lmingwex -ljpeg -lz -lgnutls -lssl -lcrypto -lws2_32 -lqpdf
 
 // func Split(originFile string, splitNum int) {
 // 	OriginFile := C.CString(originFile)
