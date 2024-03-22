@@ -2,7 +2,7 @@ package qpdf
 
 /*
 #cgo CFLAGS: -I../include
-#cgo LDFLAGS: -lgcc_s -lstdc++ -ljpeg -lz  -lssl -lcrypto  -lqpdf
+#cgo LDFLAGS: -lgcc_s -lstdc++ -lmingwex -ljpeg -lz -lgnutls -lssl -lcrypto -lws2_32 -lqpdf
 #include <stdlib.h>
 #include "qpdf/qpdf-c.h"
 */

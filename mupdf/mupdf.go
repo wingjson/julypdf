@@ -1,8 +1,6 @@
 package mupdf
 
 /*
-#cgo CFLAGS: -I../include
-#cgo LDFLAGS: -L../libs -lmupdf -lmupdfthird -lm -lcomdlg32 -lgdi32 -lgcc -Wl,--allow-multiple-definition
 #include <stdlib.h>
 #include "mupdf/fitz.h"
 
