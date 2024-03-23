@@ -50,7 +50,7 @@ func ToJpeg(fileName string, outPath string) {
 	fmt.Printf("mission complete: %s\n", elapsed)
 }
 
-func ToPng(fileName string, outPath string, waterMarker string) {
+func ToPng(fileName string, outPath string, waterMarker ...string) {
 	start := time.Now()
 	fmt.Printf("start: %s\n", start)
 
@@ -74,12 +74,12 @@ func ToPng(fileName string, outPath string, waterMarker string) {
 			continue
 		}
 		var outputImage image.Image = img
-		if waterMarker != "" {
+		if len(waterMarker) > 0 && waterMarker[0] != "" {
 			bounds := img.Bounds()
 			watermarkedImg := image.NewRGBA(bounds)
 			draw.Draw(watermarkedImg, bounds, img, bounds.Min, draw.Src)
 
-			drawString(watermarkedImg, 10, 20, waterMarker)
+			drawString(watermarkedImg, 10, 20, waterMarker[0])
 			outputImage = watermarkedImg
 		}
 

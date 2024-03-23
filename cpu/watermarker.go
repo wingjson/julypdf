@@ -18,24 +18,18 @@ func AddWatermark(originfileName string, targetFileName string, waterMark string
 	start := time.Now()
 	fmt.Printf("start: %s\n", start)
 
+	//first decrypt
 	tempFile := decrypt(originfileName, targetFileName)
 	if tempFile == "" {
 		return
 	}
 
-	// inputFile, err := os.Open(tempFile)
-	// if err != nil {
-	// 	fmt.Printf("cannot open %s: %v\n", originfileName, err)
-	// 	return
-	// }
-	// defer inputFile.Close()
 	content, err := os.ReadFile(tempFile)
 	if err != nil {
 		fmt.Printf("cannot read %s: %v\n", tempFile, err)
 		return
 	}
 
-	// 删除临时文件
 	if err := os.Remove(tempFile); err != nil {
 		fmt.Printf("cannot remove input file: %v\n", err)
 		return
