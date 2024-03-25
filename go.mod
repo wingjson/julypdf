@@ -5,6 +5,7 @@ go 1.18
 require github.com/pdfcpu/pdfcpu v0.7.0
 
 require (
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/hhrutter/lzw v1.0.0 // indirect
 	github.com/hhrutter/tiff v1.0.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect

@@ -14,8 +14,10 @@ import (
 
 // func Merge() {
 func Merge(qpdf C.qpdf_data, originFile string) {
-	filenames := strings.Split(originFile, " ")
+	println(originFile)
+	filenames := strings.Split(originFile, ",")
 	for _, filename := range filenames {
+		println(filename)
 		inputFilename := C.CString(filename)
 		defer C.free(unsafe.Pointer(inputFilename))
 		addPagesFromPDF(qpdf, inputFilename)

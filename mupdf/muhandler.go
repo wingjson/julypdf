@@ -10,11 +10,11 @@ import (
 	"image/png"
 	"os"
 	"path/filepath"
+	"sync"
 	"time"
 
-	"golang.org/x/image/font"
-	"golang.org/x/image/font/basicfont"
-	"golang.org/x/image/math/fixed"
+	"github.com/golang/freetype"
+	"github.com/golang/freetype/truetype"
 )
 
 func ToJpeg(fileName string, outPath string) {
@@ -50,7 +50,7 @@ func ToJpeg(fileName string, outPath string) {
 	fmt.Printf("mission complete: %s\n", elapsed)
 }
 
-func ToPng(fileName string, outPath string, waterMarker ...string) {
+func ToPng(fileName string, outPath string, concurrent bool, waterMarker ...string) {
 	start := time.Now()
 	fmt.Printf("start: %s\n", start)
 
@@ -59,19 +59,28 @@ func ToPng(fileName string, outPath string, waterMarker ...string) {
 		panic(err)
 	}
 	defer doc.Close()
-
-	for n := 0; n < doc.NumPage(); n++ {
-		fmt.Println("Processing page:", n)
-		imgBytes, err := doc.Png(n)
+	var font *truetype.Font
+	if len(waterMarker) > 0 && waterMarker[0] != "" {
+		fontBytes, err := os.ReadFile("font.ttf")
 		if err != nil {
-			fmt.Println("Error processing page", n, ":", err)
-			continue
+			panic(err)
+		}
+		font, err = freetype.ParseFont(fontBytes)
+		if err != nil {
+			panic(err)
+		}
+	}
+	processPage := func(page int) {
+		imgBytes, err := doc.Png(page)
+		if err != nil {
+			fmt.Println("Error processing page", page, ":", err)
+			return
 		}
 
 		img, _, err := image.Decode(bytes.NewReader(imgBytes))
 		if err != nil {
 			fmt.Println("Error decoding image:", err)
-			continue
+			return
 		}
 		var outputImage image.Image = img
 		if len(waterMarker) > 0 && waterMarker[0] != "" {
@@ -79,21 +88,41 @@ func ToPng(fileName string, outPath string, waterMarker ...string) {
 			watermarkedImg := image.NewRGBA(bounds)
 			draw.Draw(watermarkedImg, bounds, img, bounds.Min, draw.Src)
 
-			drawString(watermarkedImg, 10, 20, waterMarker[0])
+			drawString(watermarkedImg, 10, 20, waterMarker[0], font)
 			outputImage = watermarkedImg
 		}
 
-		filePath := filepath.Join(outPath, fmt.Sprintf("test%03d.png", n))
+		filePath := filepath.Join(outPath, fmt.Sprintf("test%03d.png", page))
 		file, err := os.Create(filePath)
 		if err != nil {
 			fmt.Println("Error creating file:", err)
-			continue
+			return
 		}
-		defer file.Close()
 
 		if err := png.Encode(file, outputImage); err != nil {
 			fmt.Println("Error writing watermarked image:", err)
-			continue
+			return
+		}
+		file.Close()
+		fmt.Printf("page:%d done\n", page)
+	}
+	// check if use sync or not
+	if concurrent {
+		var wg sync.WaitGroup
+		for n := 0; n < doc.NumPage(); n++ {
+			wg.Add(1)
+
+			go func(page int) {
+				defer wg.Done()
+				fmt.Println("Processing page:", page)
+				processPage(page)
+			}(n)
+
+		}
+		wg.Wait()
+	} else {
+		for n := 0; n < doc.NumPage(); n++ {
+			processPage(n)
 		}
 	}
 
@@ -104,15 +133,16 @@ func ToPng(fileName string, outPath string, waterMarker ...string) {
 // drawString draws a string on the image at the specified coordinates.
 //
 // img *image.RGBA, x, y int, label string
-func drawString(img *image.RGBA, x, y int, label string) {
-	col := color.RGBA{255, 0, 0, 255}
-	point := fixed.Point26_6{X: fixed.Int26_6(x * 64), Y: fixed.Int26_6(y * 64)}
+func drawString(img *image.RGBA, x, y int, label string, font *truetype.Font) {
 
-	d := &font.Drawer{
-		Dst:  img,
-		Src:  image.NewUniform(col),
-		Face: basicfont.Face7x13,
-		Dot:  point,
-	}
-	d.DrawString(label)
+	context := freetype.NewContext()
+	context.SetDPI(72)
+	context.SetFont(font)
+	context.SetFontSize(24)
+	context.SetClip(img.Bounds())
+	context.SetDst(img)
+	context.SetSrc(image.NewUniform(color.RGBA{255, 0, 0, 255}))
+	pt := freetype.Pt(x, y+int(context.PointToFixed(24)>>6))
+	context.DrawString(label, pt)
+
 }
