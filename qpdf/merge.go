@@ -16,6 +16,11 @@ import (
 func Merge(qpdf C.qpdf_data, originFile string) {
 	println(originFile)
 	filenames := strings.Split(originFile, ",")
+	//reverse filenames
+	for i, j := 0, len(filenames)-1; i < j; i, j = i+1, j-1 {
+		filenames[i], filenames[j] = filenames[j], filenames[i]
+	}
+
 	for _, filename := range filenames {
 		println(filename)
 		inputFilename := C.CString(filename)
