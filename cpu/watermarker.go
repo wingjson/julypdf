@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
+	"github.com/pdfcpu/pdfcpu/pkg/font"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
 )
 
@@ -43,6 +44,26 @@ func AddWatermark(originfileName string, targetFileName string, waterMark string
 		return
 	}
 	defer outputFile.Close()
+
+	// fontsToInstall := []string{"font.ttf"}
+	// errfont := api.InstallFonts(fontsToInstall)
+	// if errfont != nil {
+	// 	fmt.Println("Error installing fonts:", err)
+	// } else {
+	// 	fmt.Println("Fonts installed successfully.")
+	// }
+	// Configuration := model.NewDefaultConfiguration()
+	fontDir := "E:/common/go/julypdf" // such as /User/private/font
+	fontPath := "font.ttf"            // such as /User/private/font/your.ttf
+	font.UserFontDir = fontDir
+	err = font.LoadUserFonts()
+	if err != nil {
+		panic(err)
+	}
+	err = font.InstallTrueTypeFont(fontDir, fontPath)
+	if err != nil {
+		panic(err)
+	}
 
 	onTop := false
 	update := false
