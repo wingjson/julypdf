@@ -5,17 +5,45 @@ import (
 	"fmt"
 	"julypdf/ignoreerror"
 	"julypdf/qpdf"
+	"julypdf/utilts"
+	"log"
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/pdfcpu/pdfcpu/pkg/font"
+	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
 )
 
 func AddWatermark(originfileName string, targetFileName string, waterMark string) {
+	utilts.ExtractFont("SourceHanSansCN-Regular.ttf")
+	// utilts.ExtractFont("SourceHanSansCN-Regular.ttf")
+	userConfigDir, err := os.UserConfigDir()
+	if err != nil {
+		log.Fatalf("Error getting user home directory: %v", err)
+	}
+	fontsDir := filepath.Join(userConfigDir, "julypdf", "fonts")
+	Configuration := model.NewDefaultConfiguration()
+	Configuration.Path = fontsDir
+	// println(fontsDir)
+	fontDir := fontsDir
+	fontPath := filepath.Join(fontsDir, "SourceHanSansCN-Regular.ttf")
+	// fontPath := filepath.Join(fontsDir, "SourceHanSansCN-Regular.ttf")
+
+	font.UserFontDir = fontDir
+
+	err = font.InstallTrueTypeFont(fontDir, fontPath)
+	if err != nil {
+		panic(err)
+	}
+	err = font.LoadUserFonts()
+	if err != nil {
+		panic(err)
+	}
 	start := time.Now()
 	fmt.Printf("start: %s\n", start)
 
@@ -45,29 +73,9 @@ func AddWatermark(originfileName string, targetFileName string, waterMark string
 	}
 	defer outputFile.Close()
 
-	// fontsToInstall := []string{"font.ttf"}
-	// errfont := api.InstallFonts(fontsToInstall)
-	// if errfont != nil {
-	// 	fmt.Println("Error installing fonts:", err)
-	// } else {
-	// 	fmt.Println("Fonts installed successfully.")
-	// }
-	// Configuration := model.NewDefaultConfiguration()
-	fontDir := "E:/common/go/julypdf" // such as /User/private/font
-	fontPath := "font.ttf"            // such as /User/private/font/your.ttf
-	font.UserFontDir = fontDir
-	err = font.LoadUserFonts()
-	if err != nil {
-		panic(err)
-	}
-	err = font.InstallTrueTypeFont(fontDir, fontPath)
-	if err != nil {
-		panic(err)
-	}
-
 	onTop := false
 	update := false
-	wm, err := api.TextWatermark(waterMark, "", onTop, update, types.POINTS)
+	wm, err := api.TextWatermark(waterMark, "font:SourceHanSansCN-Regular", onTop, update, types.POINTS)
 	if err != nil {
 		fmt.Printf("cannot create watermark: %v\n", err)
 		return
