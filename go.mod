@@ -4,6 +4,8 @@ go 1.18
 
 require github.com/pdfcpu/pdfcpu v0.7.0
 
+require github.com/phpdave11/gofpdi v1.0.14-0.20211212211723-1f10f9844311 // indirect
+
 require (
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/hhrutter/lzw v1.0.0 // indirect
@@ -12,6 +14,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
+	github.com/signintech/gopdf v0.23.1
 	github.com/spf13/cobra v1.8.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	golang.org/x/image v0.12.0 // indirect

@@ -1,8 +1,6 @@
 package main
 
-import (
-	"julypdf/cmd"
-)
+import "julypdf/cmd"
 
 func main() {
 	// qpdf.cryptoOnPDF(qpdf.Decryption)
@@ -12,6 +10,7 @@ func main() {
 	// res := utilts.CheckIfEncrypted("555.pdf")
 	// fmt.Println(res)
 	// cpu.AddWatermark("555.pdf", "666.pdf", "july")
+	// cpu.Img2Pdf("1.png", "test.pdf")
 	// mupdf.ToPng("555.pdf", "test", "yesyes")
 
 	cmd.Execute()

@@ -15,7 +15,7 @@ var concurrent bool
 var rootCmd = &cobra.Command{
 	Use:   "julypdf",
 	Short: "PDF processing application",
-	Long:  `A Fast and Flexible PDF processing tool built with love by Go and Cobra.`,
+	Long:  `A Fast and Flexible FILE processing tool.`,
 }
 
 func init() {
