@@ -20,6 +20,7 @@ Julypdf encrypt -f test.pdf -o testencrypt.pdf  # 加密 PDF
 Julypdf decrypt -f test.pdf -o testdecrypt.pdf  # 解密 PDF
 Julypdf split -f file1.pdf -p 2  # 分割 PDF，从第 2 页分割
 Julypdf topdf -f file.png -o output.pdf  # 图片转 PDFf
+```
 
 ## 许可
 JulyPDF 在 MIT 许可下发布。
