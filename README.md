@@ -14,11 +14,12 @@ JulyPDF 是一个基于 QPDF 和 MuPDF 的 C API 包装器命令行工具，使�
 
 ## 开始使用
 
-Julypdf topng -f test.pdf -o test   ---pdf2png （optional -w watermarker)
-Julypdf encrypt -f test.pdf -o testencrypt.pdf
-Julypdf decrypt -f test.pdf -o testencrypt.pdf
-Julypdf split -f file1.pdf -p 2(page you want to split)
-Julypdf topdf -f file.png -o output.pdf
+```bash
+Julypdf topng -f test.pdf -o test   # PDF 转 PNG（可选水印）
+Julypdf encrypt -f test.pdf -o testencrypt.pdf  # 加密 PDF
+Julypdf decrypt -f test.pdf -o testdecrypt.pdf  # 解密 PDF
+Julypdf split -f file1.pdf -p 2  # 分割 PDF，从第 2 页分割
+Julypdf topdf -f file.png -o output.pdf  # 图片转 PDFf
 
 ## 许可
 JulyPDF 在 MIT 许可下发布。
