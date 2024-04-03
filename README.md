@@ -18,7 +18,7 @@ Getting Started:
 ## Start
 
 ```bash
-Julypdf topng -f test.pdf -o test # Convert PDF to PNG (watermark optional)
+Julypdf topng -f test.pdf -o test # Convert PDF to PNG (watermark optional -w watermarkertext)
 Julypdf encrypt -f test.pdf -o testencrypt.pdf # Encrypt PDF
 Julypdf decrypt -f test.pdf -o testdecrypt.pdf # Decrypt PDF
 Julypdf split -f file1.pdf -p 2 # Split PDF, starting from page 2
