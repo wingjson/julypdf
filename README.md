@@ -4,7 +4,7 @@
 
 Language: [中文](README_zh.md) | [EN](README.md)
 
-JulyPDF is a command-line tool wrapped around the C APIs of QPDF and MuPDF, written in Golang. It offers extensive PDF processing capabilities, including but not limited to PDF to HTML conversion, PDF to PNG conversion, adding watermarks to PDFs, splitting and merging PDFs, encrypting and decrypting PDFs, and converting images to PDF.
+JulyPDF is a command-line tool wrapped around the C APIs of qpdf and mupdf, written in Golang. It offers extensive PDF processing capabilities, including but not limited to PDF to HTML conversion, PDF to PNG conversion, adding watermarks to PDFs, splitting and merging PDFs, encrypting and decrypting PDFs, and converting images to PDF.
 
 ## Features:
 
