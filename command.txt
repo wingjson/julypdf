@@ -1,0 +1,2 @@
+build  a
+cd /api  go build -buildmode=c-archive -o libfile.a capi.go
