@@ -1,2 +1,6 @@
 build  a
 cd /api  go build -buildmode=c-archive -o libfile.a capi.go
+
+$env:CGO_CFLAGS="-ID:/Code/mysy2/ucrt64/include"
+$env:CGO_LDFLAGS="-LD:/Code/mysy2/ucrt64/lib -lgcc_s -lstdc++ -lmingwex -ljpeg -lz -lgnutls -lssl -lcrypto -lws2_32 -lqpdf"
+$env:PATH+=";D:/Code/mysy2/ucrt64/bin"
